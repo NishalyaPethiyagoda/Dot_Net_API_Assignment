@@ -20,8 +20,7 @@ public class Farm
 
     public bool HasBarge { get; set; }
 
-
-    //public byte[]? Picture { get; set; }
+    public byte[]? Picture { get; set; }
 
     public ICollection<FarmWorkers> Workers { get; set; }
 

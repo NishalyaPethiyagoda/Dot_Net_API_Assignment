@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace backendAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class first : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,7 +21,8 @@ namespace backendAPI.Migrations
                     Latitude = table.Column<double>(type: "float", nullable: false),
                     Longitude = table.Column<double>(type: "float", nullable: false),
                     NoOfCages = table.Column<int>(type: "int", nullable: false),
-                    HasBarge = table.Column<bool>(type: "bit", nullable: false)
+                    HasBarge = table.Column<bool>(type: "bit", nullable: false),
+                    Picture = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -103,8 +104,7 @@ namespace backendAPI.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Workers_DesignationId",
                 table: "Workers",
-                column: "DesignationId",
-                unique: true);
+                column: "DesignationId");
         }
 
         /// <inheritdoc />

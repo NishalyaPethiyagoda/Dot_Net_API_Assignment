@@ -46,6 +46,9 @@ namespace backendAPI.Migrations
                     b.Property<int>("NoOfCages")
                         .HasColumnType("int");
 
+                    b.Property<byte[]>("Picture")
+                        .HasColumnType("varbinary(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Farms");

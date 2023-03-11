@@ -16,11 +16,11 @@ namespace backendAPI.Controllers
     [ApiController]
     public class FarmWorkerController : ControllerBase
     {
-        private readonly AppDbContext DbContext;
+        private readonly AppDbContext _dbContext;
 
         public FarmWorkerController(AppDbContext dbContext)
         {
-            DbContext = dbContext;
+            _dbContext = dbContext;
         }
 
 
@@ -30,7 +30,7 @@ namespace backendAPI.Controllers
         {
             //List<Worker> dbWorkersList = await DbContext.Workers.ToListAsync();
             
-            List<FarmWorkers> dbFarmWorkersList = await DbContext.FarmWorkers.Include(a=> a.Worker).ToListAsync();
+            List<FarmWorkers> dbFarmWorkersList = await _dbContext.FarmWorkers.Include(a=> a.Worker).ToListAsync();
 
             List<Worker> workerList = new List<Worker>();                     //to store worker objs which assigned to that farm    
 
@@ -59,7 +59,7 @@ namespace backendAPI.Controllers
                 farmWorkerResponse.WorkerName = worker.Name;
                 farmWorkerResponse.CertifiedDateUntil = worker.CertifiedDate;
 
-                var designatedWorker = await DbContext.WorkerDesignations.FindAsync(worker.DesignationId);
+                var designatedWorker = await _dbContext.WorkerDesignations.FindAsync(worker.DesignationId);
                 if(designatedWorker != null)
                 {
                     farmWorkerResponse.Designation = designatedWorker.name;
@@ -68,15 +68,6 @@ namespace backendAPI.Controllers
                 {
                     return Ok("error: designations not retrieved correctly");
                 }
-                ////obtaining list of all farms where each of these workers are assigned to 
-                //foreach (FarmWorkers person in dbFarmWorkersList)
-                //{
-                //    if (worker.Id == person.WorkerId)
-                //    {
-                //        workersFarmIds.Add(person.FarmId);
-                //    }
-                //}
-                //farmWorkerResponseTemp.AlreadyAssignedFarms = workersFarmIds;
 
                 farmWorkerResponseList.Add(farmWorkerResponse);
             }
@@ -174,7 +165,7 @@ namespace backendAPI.Controllers
         [Route("{farmId:int}")]
         public async Task<IActionResult> AddFarmWorkers([FromRoute] int farmId,FarmWorkerRequest farmWorkerAdd)
         {
-            var farmWorkerlist = await DbContext.FarmWorkers.ToListAsync();   //famWorkers.where.firstOrdefault
+            var farmWorkerlist = await _dbContext.FarmWorkers.ToListAsync();   //famWorkers.where.firstOrdefault
 
             //create farmWorker object with user data
             var newFarmWorker = new FarmWorkers()
@@ -201,8 +192,8 @@ namespace backendAPI.Controllers
 
             if (isAlreadyNotAssigned == true)
             {
-                await DbContext.FarmWorkers.AddAsync(newFarmWorker);
-                var areChangesSaved = await DbContext.SaveChangesAsync();
+                await _dbContext.FarmWorkers.AddAsync(newFarmWorker);
+                var areChangesSaved = await _dbContext.SaveChangesAsync();
 
                 if (areChangesSaved > 0)
                 {
@@ -241,9 +232,7 @@ namespace backendAPI.Controllers
         [Route("{farmId:int}")]
         public async Task<IActionResult> DeleteFarmWorker([FromRoute] int farmId, FarmWorkerRequest farmWorkerRequest)
         {
-            var farmWorkerList = await DbContext.FarmWorkers.ToListAsync();
-
-            FarmWorkers deletingWorker = new FarmWorkers();
+            var farmWorkerList = await _dbContext.FarmWorkers.ToListAsync();
 
             if (farmWorkerList != null)
             {
@@ -253,8 +242,8 @@ namespace backendAPI.Controllers
                     {
                         if(farmWorkerRequest.WorkerId == farmWorker.WorkerId) 
                         {
-                            DbContext.FarmWorkers.Remove(farmWorker);
-                            var areChangesSaved = await DbContext.SaveChangesAsync();
+                            _dbContext.FarmWorkers.Remove(farmWorker);
+                            var areChangesSaved = await _dbContext.SaveChangesAsync();
 
                             if(areChangesSaved>0)
                             {

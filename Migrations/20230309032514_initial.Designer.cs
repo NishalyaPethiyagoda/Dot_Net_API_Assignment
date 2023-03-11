@@ -12,8 +12,8 @@ using backendAPI.Data;
 namespace backendAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230301085105_first")]
-    partial class first
+    [Migration("20230309032514_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,6 +48,9 @@ namespace backendAPI.Migrations
 
                     b.Property<int>("NoOfCages")
                         .HasColumnType("int");
+
+                    b.Property<byte[]>("Picture")
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("Id");
 
@@ -104,8 +107,7 @@ namespace backendAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DesignationId")
-                        .IsUnique();
+                    b.HasIndex("DesignationId");
 
                     b.ToTable("Workers");
                 });
@@ -148,13 +150,13 @@ namespace backendAPI.Migrations
 
             modelBuilder.Entity("backendAPI.Models.Worker", b =>
                 {
-                    b.HasOne("backendAPI.Models.WorkerDesignations", "WorkerDesignations")
-                        .WithOne("Worker")
-                        .HasForeignKey("backendAPI.Models.Worker", "DesignationId")
+                    b.HasOne("backendAPI.Models.WorkerDesignations", "WorkerDesignation")
+                        .WithMany("Workers")
+                        .HasForeignKey("DesignationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("WorkerDesignations");
+                    b.Navigation("WorkerDesignation");
                 });
 
             modelBuilder.Entity("backendAPI.Models.Farm", b =>
@@ -169,8 +171,7 @@ namespace backendAPI.Migrations
 
             modelBuilder.Entity("backendAPI.Models.WorkerDesignations", b =>
                 {
-                    b.Navigation("Worker")
-                        .IsRequired();
+                    b.Navigation("Workers");
                 });
 #pragma warning restore 612, 618
         }
