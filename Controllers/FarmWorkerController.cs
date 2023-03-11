@@ -32,7 +32,7 @@ namespace backendAPI.Controllers
             
             List<FarmWorkers> dbFarmWorkersList = await _dbContext.FarmWorkers.Include(a=> a.Worker).ToListAsync();
 
-            List<Worker> workerList = new List<Worker>();                     //to store worker objs which assigned to that farm    
+            List<Worker> workerList = new ();                     //to store worker objs which assigned to that farm    
 
             //identifying all workers associated to that farm and add to workerList
             if(dbFarmWorkersList != null)
