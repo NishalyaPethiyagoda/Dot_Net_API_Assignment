@@ -3,11 +3,9 @@ using backendAPI.Models;
 using backendAPI.Request.Worker;
 using backendAPI.Response.Worker;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol;
-using System.Linq;
-using System.Net.WebSockets;
+
 
 namespace backendAPI.Controllers
 {
@@ -33,13 +31,17 @@ namespace backendAPI.Controllers
             {
                 foreach (Worker worker in workerList)
                 {
-                    WorkerResponse workerResponse = new WorkerResponse
+                    WorkerResponse workerResponse = new()
                     {
+                        Id= worker.Id,
                         Name = worker.Name,
                         Age = worker.Age,
                         Email = worker.Email,
+                        //CertifiedDate = DateOnly.FromDateTime(worker.CertifiedDate),
                         CertifiedDate = worker.CertifiedDate,
-                        Designation = worker.WorkerDesignation.name,
+
+                        DesignationName = worker.WorkerDesignation.name,
+                        DesignationId = worker.DesignationId.ToString(),
                     };
                     workerResponseList.Add(workerResponse);
                 }
@@ -118,24 +120,17 @@ namespace backendAPI.Controllers
                 worker.Age = updateWorker.Age;
                 worker.DesignationId = updateWorker.DesignationId;
 
-                Worker? anyRegisteredWorkers = await _dbContext.Workers.Where(w => w.Name == worker.Name).SingleOrDefaultAsync();    
-                if (anyRegisteredWorkers == null)
-                {
-                    var areChangesSaved = await _dbContext.SaveChangesAsync();
+                var areChangesSaved = await _dbContext.SaveChangesAsync();
 
-                    if (areChangesSaved > 0)
-                    {
-                        return Ok("Updataion successfull");
-                    }
-                    else
-                    {
-                        return Ok("saving changes were unsuccessful");
-                    }
+                if (areChangesSaved > 0)
+                {
+                    return Ok("Updataion successfull");
                 }
                 else
                 {
-                    return Ok("a worker is registered under the same name");
+                    return Ok("saving changes were unsuccessful");
                 }
+
             }
             else
             {
