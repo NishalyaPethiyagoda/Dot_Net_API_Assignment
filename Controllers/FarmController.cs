@@ -29,11 +29,13 @@ namespace backendAPI.Controllers
            {
                 foreach(Farm farm in farmsList)
                 {
-                    FarmResponse farmResponse = new FarmResponse();
+                    FarmResponse farmResponse = new();
 
+                    farmResponse.Id = farm.Id;
                     farmResponse.Name = farm.Name;
                     farmResponse.Latitude = farm.Latitude;
-                    farmResponse.Longitude = farm.Longitude;
+                    //farmResponse.Latitude = farm.Latitude.ToString();
+                    farmResponse.Longitude = farm.Longitude.ToString();
                     farmResponse.NoOfCages = farm.NoOfCages;
                     farmResponse.HasBarge = farm.HasBarge;
                     //include pic

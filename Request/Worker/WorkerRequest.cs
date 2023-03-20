@@ -7,6 +7,8 @@ namespace backendAPI.Request.Worker
     {
         public string Name { get; set; }
 
+        //public DateOnly CertifiedDate { get; set; }
+
         public DateTime CertifiedDate { get; set; }
 
         public string Email { get; set; }

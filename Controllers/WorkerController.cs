@@ -5,7 +5,7 @@ using backendAPI.Response.Worker;
 using Microsoft.AspNetCore.Mvc;
 
 using Microsoft.EntityFrameworkCore;
-
+using System.Globalization;
 
 namespace backendAPI.Controllers
 {
@@ -37,8 +37,8 @@ namespace backendAPI.Controllers
                         Name = worker.Name,
                         Age = worker.Age,
                         Email = worker.Email,
-                        //CertifiedDate = DateOnly.FromDateTime(worker.CertifiedDate),
-                        CertifiedDate = worker.CertifiedDate,
+                        CertifiedDate = DateOnly.FromDateTime(worker.CertifiedDate),
+                        //CertifiedDate = worker.CertifiedDate,
 
                         DesignationName = worker.WorkerDesignation.name,
                         DesignationId = worker.DesignationId.ToString(),
