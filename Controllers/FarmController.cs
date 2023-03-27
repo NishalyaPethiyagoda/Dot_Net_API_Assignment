@@ -35,7 +35,7 @@ namespace backendAPI.Controllers
                     farmResponse.Name = farm.Name;
                     farmResponse.Latitude = farm.Latitude;
                     //farmResponse.Latitude = farm.Latitude.ToString();
-                    farmResponse.Longitude = farm.Longitude.ToString();
+                    farmResponse.Longitude = farm.Longitude;
                     farmResponse.NoOfCages = farm.NoOfCages;
                     farmResponse.HasBarge = farm.HasBarge;
                     //include pic

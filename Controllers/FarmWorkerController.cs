@@ -57,7 +57,8 @@ namespace backendAPI.Controllers
                 //compiling reponse object with data 
                 farmWorkerResponse.WorkerId = worker.Id;
                 farmWorkerResponse.WorkerName = worker.Name;
-                farmWorkerResponse.CertifiedDateUntil = worker.CertifiedDate;
+                farmWorkerResponse.Age = worker.Age;
+                farmWorkerResponse.CertifiedDate = DateOnly.FromDateTime(worker.CertifiedDate);
 
                 var designatedWorker = await _dbContext.WorkerDesignations.FindAsync(worker.DesignationId);
                 if(designatedWorker != null)
@@ -74,96 +75,10 @@ namespace backendAPI.Controllers
             return Ok(farmWorkerResponseList);
         }
 
-
-        //[HttpGet]
-        //[Route("{farmId:int}")]
-        //public async Task<IActionResult> GetAvailableFarmWorkers([FromRoute] int farmId)
-        //{
-        //    List<FarmWorkers> dbFarmWorkersList = await DbContext.FarmWorkers.ToListAsync(); 
-
-        //    List<Worker> allWorkerList = await DbContext.Workers.ToListAsync();   
-
-        //    List<Worker> assignedFarmWorkersList = new List<Worker>();
-        //    List<Worker> availablewWorkerList = new List<Worker>();
-
-        //    foreach (FarmWorkers farmWorker in dbFarmWorkersList)
-        //    {
-        //        if (farmWorker.FarmId == farmId)
-        //        {
-        //            var WorkerTempObj = new Worker();
-        //            WorkerTempObj = await DbContext.Workers.FindAsync(farmWorker.WorkerId);
-
-        //            assignedFarmWorkersList.Add(WorkerTempObj);
-
-        //        }
-        //    }
-            
-
-        //    foreach (Worker worker1 in allWorkerList)
-        //    {
-        //        bool isWorkerAlreadyAssigned = false;
-
-        //        foreach (Worker worker2 in assignedFarmWorkersList)
-        //        {
-        //            if(worker1.Id == worker2.Id)
-        //            {
-                        
-        //                isWorkerAlreadyAssigned = true;
-        //                break;
-        //            }
-        //            else
-        //            {
-        //                isWorkerAlreadyAssigned = false;
-        //            }
-        //        }
-
-        //        if(isWorkerAlreadyAssigned == false)
-        //        {
-        //            availablewWorkerList.Add(worker1);
-        //        }
-        //    }
-        //    List<FarmWorkerResponse> farmWorkerResponseList = new List<FarmWorkerResponse>();
-
-
-        //    foreach (Worker worker in availablewWorkerList)    
-        //    {
-        //        var farmWorkerResponseTemp = new FarmWorkerResponse();
-        //        List<int>? workersFarmIds = new List<int>();
-
-        //        //compiling reponse object with data 
-        //        farmWorkerResponseTemp.WorkerId = worker.Id;
-        //        farmWorkerResponseTemp.WorkerName = worker.Name;
-        //        farmWorkerResponseTemp.CertifiedDateUntil = worker.CertifiedDate;
-
-        //        var designatedWorker = await DbContext.WorkerDesignations.FindAsync(worker.DesignationId);
-        //        var designation = designatedWorker.name;
-
-        //        farmWorkerResponseTemp.Designation = designation;
-
-        //        //further obtaining list of farms each worker is assigned to other than this farm
-                
-        //        //foreach(Worker worker1 in allWorkerList) 
-        //        //{
-        //        //    foreach (FarmWorkers worker3 in dbFarmWorkersList)
-        //        //    {
-        //        //        if (worker1.Id == worker3.WorkerId && worker3.FarmId != farmId)
-        //        //        {
-        //        //            workersFarmIds.Add(worker3.FarmId);
-        //        //        }
-        //        //    }
-        //        //}
-        //        //farmWorkerResponseTemp.AlreadyAssignedFarms = workersFarmIds;
-
-        //        farmWorkerResponseList.Add(farmWorkerResponseTemp);
-        //    }
-
-        //    return Ok(farmWorkerResponseList);
-        //}
-
          
         [HttpPost]
-        [Route("{farmId:int}")]
-        public async Task<IActionResult> AddFarmWorkers([FromRoute] int farmId,FarmWorkerRequest farmWorkerAdd)
+        [Route("{farmId:int}/{workerId:int}")]
+        public async Task<IActionResult> AddFarmWorkers([FromRoute] int farmId,[FromRoute] int workerId)
         {
             var farmWorkerlist = await _dbContext.FarmWorkers.ToListAsync();   //famWorkers.where.firstOrdefault
 
@@ -171,7 +86,7 @@ namespace backendAPI.Controllers
             var newFarmWorker = new FarmWorkers()
             {
                 FarmId = farmId,
-                WorkerId = farmWorkerAdd.WorkerId,
+                WorkerId = workerId,
 
             };
 
@@ -210,27 +125,9 @@ namespace backendAPI.Controllers
             }
         }
 
-        //[HttpPut]
-        //[Route("{id:int}, {farmId:int}")]
-        //public async Task<IActionResult> UpdateFarmWorkers([FromRoute] int id, int farmId,FarmWorkerRequest updateFarmWorkers)
-        //{
-        //    var FarmWorkerObj = await DbContext.FarmWorkers.FindAsync(id);
-
-        //    if (FarmWorkerObj != null)
-        //    {
-        //        FarmWorkerObj.FarmId = farmId;
-        //        FarmWorkerObj.WorkerId = updateFarmWorkers.WorkerId;
-
-        //        await DbContext.SaveChangesAsync();
-
-        //       return Ok("updated successfully");
-        //    }
-        //   return Ok("error: farmworker object not recieved");
-        //}
-
         [HttpDelete]
-        [Route("{farmId:int}")]
-        public async Task<IActionResult> DeleteFarmWorker([FromRoute] int farmId, FarmWorkerRequest farmWorkerRequest)
+        [Route("{farmId:int}/{workerId:int}")]
+        public async Task<IActionResult> DeleteFarmWorker([FromRoute] int farmId, [FromRoute] int workerId)
         {
             var farmWorkerList = await _dbContext.FarmWorkers.ToListAsync();
 
@@ -240,7 +137,7 @@ namespace backendAPI.Controllers
                 {
                     if(farmId == farmWorker.FarmId)
                     {
-                        if(farmWorkerRequest.WorkerId == farmWorker.WorkerId) 
+                        if(workerId == farmWorker.WorkerId) 
                         {
                             _dbContext.FarmWorkers.Remove(farmWorker);
                             var areChangesSaved = await _dbContext.SaveChangesAsync();

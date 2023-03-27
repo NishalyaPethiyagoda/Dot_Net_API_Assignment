@@ -9,7 +9,7 @@ namespace backendAPI.Response.Farm
 
         public double Latitude { get; set; }
 
-        public string Longitude { get; set; }
+        public double Longitude { get; set; }
 
         public int NoOfCages { get; set; }
 
