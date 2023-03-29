@@ -1,5 +1,7 @@
 ﻿
 
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace backendAPI.Request.Farm
 {
     public class FarmRequest
@@ -14,6 +16,10 @@ namespace backendAPI.Request.Farm
 
         public bool HasBarge { get; set; }
 
-        //public byte[]? Picture { get; set; }  //farm should have a picture. cant be nullable
+        //public string ImageName { get; set; }
+
+        //public string ImageSrc { get; set; }
+
+        public IFormFile ImageFile { get; set; } //farm should have a picture. cant be nullable
     }
 }

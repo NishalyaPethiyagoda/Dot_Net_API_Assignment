@@ -15,6 +15,10 @@ namespace backendAPI.Response.Farm
 
         public bool HasBarge { get; set; }
 
+        public string? ImageName { get; set; }
+
+        public IFormFile ImageFile { get; set; }
+
         //public byte[]? Picture { get; set; }
     }
 }

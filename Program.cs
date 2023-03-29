@@ -2,6 +2,7 @@
 
 using backendAPI.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,20 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 app.UseCors();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, "Images")),
+    RequestPath = "/Images",
+
+    OnPrepareResponse = ctx =>
+    {
+        ctx.Context.Response.Headers["Access-Control-Allow-Origin"] = "*";
+        ctx.Context.Response.Headers["Access-Control-Allow-Headers"] =
+        "Origin, X-Requested-With, Content-Type, Accept";
+    },
+});
+
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthorization();
