@@ -96,11 +96,14 @@ namespace backendAPI.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(90)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(60)");
+
+                    b.Property<string>("WorkerPhotoName")
+                        .HasColumnType("nvarchar(90)");
 
                     b.HasKey("Id");
 

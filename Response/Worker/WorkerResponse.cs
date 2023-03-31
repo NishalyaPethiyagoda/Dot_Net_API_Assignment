@@ -10,20 +10,18 @@ namespace backendAPI.Response.Worker
 
         public DateOnly CertifiedDate { get; set; }
 
-        //public DateTime CertifiedDate { get; set; }
-
         public string Email { get; set; }
 
         public int Age { get; set; }
 
         public string DesignationId { get; set; }
 
+        public string? WorkerPhotoSrc { get; set; }
+
+        public IFormFile WorkerPhoto { get; set; }
+
         public string DesignationName { get; set; }
 
 
-        //public static implicit operator List<object>(WorkerResponse v)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }

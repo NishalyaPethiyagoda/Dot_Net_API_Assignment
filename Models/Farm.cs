@@ -29,7 +29,7 @@ public class Farm
     public string? ImageName { get; set; }
 
     [NotMapped]
-    public IFormFile ImageFile { get; set; }
+    public IFormFile? ImageFile { get; set; }
 
     public ICollection<FarmWorkers> Workers { get; set; }
 

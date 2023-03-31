@@ -44,11 +44,9 @@ namespace backendAPI.Controllers
                     farmResponse.Longitude = farm.Longitude;
                     farmResponse.NoOfCages = farm.NoOfCages;
                     farmResponse.HasBarge = farm.HasBarge;
-                    //farmResponse.ImageName = farm.ImageName;
+              
                     farmResponse.ImageName = Path.Combine("http://localhost:12759", "Images", farm.ImageName);
-                    //"http: //localhost:12759/Images/${farm.ImageName}";
-                    //farmResponse.ImageFile = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.GetEncodedPathAndQuery,farm.ImageName)
-
+                  
                     farmResponseList.Add(farmResponse);
                 }
                 return Ok(farmResponseList);
@@ -58,21 +56,7 @@ namespace backendAPI.Controllers
                 return Ok("farm List is null");
             }
         }
-        //[NonAction]
-        //public IActionResult MyAction()
-        //{
-        //    string filePath = "path/to/image.jpg";
-        //    string contentType = "image/jpeg";
 
-        //    var fileStream = new FileStream(filePath, FileMode.Open);
-        //    var formFile = new FormFile(fileStream, 0, fileStream.Length, null, Path.GetFileName(filePath))
-        //    {
-        //        Headers = new HeaderDictionary(),
-        //        ContentType = contentType
-        //    };
-
-        //    return formFile;
-        //}
         [HttpPost]
         public async Task<IActionResult> AddFarm([FromForm] FarmRequest addFarm)
         {
@@ -137,7 +121,7 @@ namespace backendAPI.Controllers
 
         [HttpPut]
         [Route("{Id:int}")]
-        public async Task<IActionResult> UpdateFarm([FromRoute] int Id, FarmRequest updateFarm)
+        public async Task<IActionResult> UpdateFarm([FromRoute] int Id, [FromForm] FarmUpdateRequest updateFarm)
         {
             var FarmObj = await DbContext.Farms.FindAsync(Id);
 
@@ -148,7 +132,10 @@ namespace backendAPI.Controllers
                 FarmObj.Longitude = updateFarm.Longitude;
                 FarmObj.NoOfCages = updateFarm.NoOfCages;
                 FarmObj.HasBarge = updateFarm.HasBarge;
-                //include farm pic
+                FarmObj.ImageFile = updateFarm.ImageFile;
+
+                FarmObj.ImageName = await SaveImage(updateFarm.ImageFile);
+
 
                 var areChangesSaved = await DbContext.SaveChangesAsync();
 
@@ -206,3 +193,4 @@ namespace backendAPI.Controllers
     }
     
 }
+

@@ -16,10 +16,6 @@ namespace backendAPI.Request.Farm
 
         public bool HasBarge { get; set; }
 
-        //public string ImageName { get; set; }
-
-        //public string ImageSrc { get; set; }
-
         public IFormFile ImageFile { get; set; } //farm should have a picture. cant be nullable
     }
 }

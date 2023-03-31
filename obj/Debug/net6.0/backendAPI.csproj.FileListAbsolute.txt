@@ -16,14 +16,6 @@ D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\obj\Debug\net6.0\backendA
 D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\obj\Debug\net6.0\backendAPI.csproj.CoreCompileInputs.cache
 D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\obj\Debug\net6.0\backendAPI.MvcApplicationPartsAssemblyInfo.cs
 D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\obj\Debug\net6.0\backendAPI.MvcApplicationPartsAssemblyInfo.cache
-D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\obj\Debug\net6.0\staticwebassets\msbuild.backendAPI.Microsoft.AspNetCore.StaticWebAssets.props
-D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\obj\Debug\net6.0\staticwebassets\msbuild.build.backendAPI.props
-D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.backendAPI.props
-D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.backendAPI.props
-D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\obj\Debug\net6.0\staticwebassets.pack.json
-D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\obj\Debug\net6.0\staticwebassets.build.json
-D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\obj\Debug\net6.0\staticwebassets.development.json
-D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\obj\Debug\net6.0\scopedcss\bundle\backendAPI.styles.css
 D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\obj\Debug\net6.0\backendAPI.csproj.CopyComplete
 D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\obj\Debug\net6.0\backendAPI.dll
 D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\obj\Debug\net6.0\refint\backendAPI.dll
@@ -287,3 +279,8 @@ D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\bin\Debug\net6.0\runtimes
 D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
 D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\bin\Debug\net6.0\Microsoft.AspNetCore.JsonPatch.dll
+D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\bin\Debug\net6.0\Microsoft.AspNetCore.Mvc.Razor.Extensions.dll
+D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll
+D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\obj\Debug\net6.0\backendAPI.RazorAssemblyInfo.cache
+D:\work\havbruksloggen\dotNet\backendAPIsol\backendAPI\obj\Debug\net6.0\backendAPI.RazorAssemblyInfo.cs

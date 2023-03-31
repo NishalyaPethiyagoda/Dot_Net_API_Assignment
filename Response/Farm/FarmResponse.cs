@@ -18,7 +18,5 @@ namespace backendAPI.Response.Farm
         public string? ImageName { get; set; }
 
         public IFormFile ImageFile { get; set; }
-
-        //public byte[]? Picture { get; set; }
     }
 }

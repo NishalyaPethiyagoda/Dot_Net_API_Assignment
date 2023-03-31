@@ -5,7 +5,16 @@ using backendAPI.Response.Worker;
 using Microsoft.AspNetCore.Mvc;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using System.Globalization;
+
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+
+using System.Net;
+using static Azure.Core.HttpHeader;
+
+
 
 namespace backendAPI.Controllers
 {
@@ -13,48 +22,61 @@ namespace backendAPI.Controllers
     [ApiController]
     public class WorkerController : ControllerBase
     {
-        private readonly AppDbContext _dbContext;     
+        private readonly AppDbContext _dbContext;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public WorkerController(AppDbContext DbContext)
+        public WorkerController(AppDbContext DbContext, IWebHostEnvironment hostEnvironment)
         {
             this._dbContext = DbContext;
+            this._hostEnvironment = hostEnvironment;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetWorkers()
         {
-            List<Worker> workerList =  await _dbContext.Workers.Include(worker=>worker.WorkerDesignation).ToListAsync();
-
-            List<WorkerResponse> workerResponseList = new();  
-            
-            if(workerList!= null)
+            try
             {
-                foreach (Worker worker in workerList)
+                List<Worker> workerList = await _dbContext.Workers.Include(worker => worker.WorkerDesignation).ToListAsync();
+
+                List<WorkerResponse> workerResponseList = new();
+
+                if (workerList != null)
                 {
-                    WorkerResponse workerResponse = new()
+                    foreach (Worker worker in workerList)
                     {
-                        Id= worker.Id,
-                        Name = worker.Name,
-                        Age = worker.Age,
-                        Email = worker.Email,
-                        CertifiedDate = DateOnly.FromDateTime(worker.CertifiedDate),
-                        //CertifiedDate = worker.CertifiedDate,
+                        WorkerResponse workerResponse = new()
+                        {
+                            Id = worker.Id,
+                            Name = worker.Name,
+                            Age = worker.Age,
+                            Email = worker.Email,
+                            CertifiedDate = DateOnly.FromDateTime(worker.CertifiedDate),
+                            //CertifiedDate = worker.CertifiedDate,
 
-                        DesignationName = worker.WorkerDesignation.name,
-                        DesignationId = worker.DesignationId.ToString(),
-                    };
-                    workerResponseList.Add(workerResponse);
+                            DesignationName = worker.WorkerDesignation.name,
+                            DesignationId = worker.DesignationId.ToString(),
+                            
+                            WorkerPhotoSrc = Path.Combine("http://localhost:12759", "Images", worker.WorkerPhotoName ?? "defaultWorkerImage.jpg"),
+                        };
+                        workerResponseList.Add(workerResponse);
+                    }
+                    return Ok(workerResponseList);
                 }
-                return Ok(workerResponseList);
+                else
+                {
+                    return Ok("worker List is null");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return Ok("worker List is null");
+
+                throw;
             }
         }
 
+
         [HttpPost]
-        public async Task<IActionResult> PostWorkers(WorkerRequest addWorker)
+        public async Task<IActionResult> PostWorkers([FromForm] WorkerRequest addWorker)
         {
             var workerList = await _dbContext.Workers.Include(worker=>worker.WorkerDesignation).ToListAsync();
 
@@ -65,11 +87,12 @@ namespace backendAPI.Controllers
                 Email = addWorker.Email,
                 Age = addWorker.Age,
                 DesignationId = addWorker.DesignationId,
+                WorkerPhoto= addWorker.WorkerPhoto,
             };
             bool isWorkerDuplicated = false;
 
             if (workerList!= null)
-            {
+            { 
                 
                 foreach (Worker worker in workerList)
                 {
@@ -87,6 +110,12 @@ namespace backendAPI.Controllers
 
             if(!isWorkerDuplicated)
             {
+                if(newWorker.WorkerPhoto!= null)
+                {
+                    newWorker.WorkerPhotoName = await SaveImage(newWorker.WorkerPhoto);
+                }
+                
+
                 await _dbContext.Workers.AddAsync(newWorker);
                 var areChangesSaved = await _dbContext.SaveChangesAsync();
 
@@ -106,11 +135,11 @@ namespace backendAPI.Controllers
         }
 
         [HttpPut]
-        [Route("{id:int}")]
-        public async Task<IActionResult> UpdateWorkers([FromRoute] int id, WorkerRequest updateWorker)
+        [Route("{Id:int}")]
+        public async Task<IActionResult> UpdateWorkers([FromRoute] int Id,[FromForm] WorkerUpdateRequest updateWorker)
         {
             //var  workerList = await DbContext.Workers.ToListAsync();
-            var worker = await _dbContext.Workers.FindAsync(id);
+            var worker = await _dbContext.Workers.FindAsync(Id);
 
             if (worker != null)
             {
@@ -119,6 +148,10 @@ namespace backendAPI.Controllers
                 worker.Email = updateWorker.Email;
                 worker.Age = updateWorker.Age;
                 worker.DesignationId = updateWorker.DesignationId;
+
+                //worker.WorkerPhoto = await SaveImage(updateWorker.ImageFile);
+                worker.WorkerPhoto = updateWorker.ImageFile;
+                worker.WorkerPhotoName = await SaveImage(updateWorker.ImageFile);
 
                 var areChangesSaved = await _dbContext.SaveChangesAsync();
 
@@ -163,5 +196,38 @@ namespace backendAPI.Controllers
                 return Ok("worker is null");
             }
         }
+        [NonAction]
+        public async Task<string> SaveImage(IFormFile imageFile)
+        {
+            if (imageFile != null)
+            {
+                string imageName = new string(Path.GetFileNameWithoutExtension(imageFile.FileName).Take(10).ToArray()).Replace(' ', '-');
+                imageName = imageName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(imageFile.FileName);
+                var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, "Images", imageName);
+
+                using (var fileStream = new FileStream(imagePath, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(fileStream);
+                }
+                return imageName;
+            }
+            else
+            {
+                string imageName = Path.Combine("http://localhost:12759", "Images", "defaultWorkerImage.jpg"); 
+                return imageName;
+            }
+        }
+        //[NonAction]
+        //public async Task<IFormFile> GetImage(string ImageNme)
+        //{
+        //    if(ImageNme == null) 
+        //    { 
+        //        return await 
+        //    }
+        //    else
+        //    {
+        //        return 
+        //    }
+        //}
     }
 }
