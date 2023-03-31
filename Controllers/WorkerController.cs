@@ -196,14 +196,35 @@ namespace backendAPI.Controllers
                 return Ok("worker is null");
             }
         }
+        //[NonAction]
+        //public async Task<string> SaveImage(IFormFile imageFile)
+        //{
+        //    if (imageFile != null)
+        //    {
+        //        string imageName = new string(Path.GetFileNameWithoutExtension(imageFile.FileName).Take(10).ToArray()).Replace(' ', '-');
+        //        imageName = imageName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(imageFile.FileName);
+        //        var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, "Images", imageName);
+
+        //        using (var fileStream = new FileStream(imagePath, FileMode.Create))
+        //        {
+        //            await imageFile.CopyToAsync(fileStream);
+        //        }
+        //        return imageName;
+        //    }
+        //    else
+        //    {
+        //        string imageName = Path.Combine("http://localhost:12759", "Images", "defaultWorkerImage.jpg"); 
+        //        return imageName;
+        //    }
+        //}
         [NonAction]
         public async Task<string> SaveImage(IFormFile imageFile)
         {
             if (imageFile != null)
             {
                 string imageName = new string(Path.GetFileNameWithoutExtension(imageFile.FileName).Take(10).ToArray()).Replace(' ', '-');
-                imageName = imageName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(imageFile.FileName);
-                var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, "Images", imageName);
+                imageName += Path.GetExtension(imageFile.FileName);
+                var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, "Images1", "FarmImages", imageName);
 
                 using (var fileStream = new FileStream(imagePath, FileMode.Create))
                 {
@@ -213,7 +234,7 @@ namespace backendAPI.Controllers
             }
             else
             {
-                string imageName = Path.Combine("http://localhost:12759", "Images", "defaultWorkerImage.jpg"); 
+                string imageName = Path.Combine("http://localhost:12759", "Images1", "FarmImages", "defaultWorkerImage.jpg");
                 return imageName;
             }
         }
