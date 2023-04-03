@@ -89,6 +89,7 @@ namespace backendAPI.Controllers
                 DesignationId = addWorker.DesignationId,
                 WorkerPhoto= addWorker.WorkerPhoto,
             };
+
             bool isWorkerDuplicated = false;
 
             if (workerList!= null)
@@ -150,8 +151,12 @@ namespace backendAPI.Controllers
                 worker.DesignationId = updateWorker.DesignationId;
 
                 //worker.WorkerPhoto = await SaveImage(updateWorker.ImageFile);
-                worker.WorkerPhoto = updateWorker.ImageFile;
-                worker.WorkerPhotoName = await SaveImage(updateWorker.ImageFile);
+                if(updateWorker.ImageFile != null)
+                {
+                    worker.WorkerPhoto = updateWorker.ImageFile;
+                    worker.WorkerPhotoName = await SaveImage(updateWorker.ImageFile);
+                }
+                
 
                 var areChangesSaved = await _dbContext.SaveChangesAsync();
 
